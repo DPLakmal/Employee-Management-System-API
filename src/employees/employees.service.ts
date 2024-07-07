@@ -22,8 +22,9 @@ export class EmployeesService {
             designation,
             nearestCity,
             tier
-
         }
+
+
 
     }
 }
