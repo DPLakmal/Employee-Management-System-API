@@ -9,7 +9,7 @@ export class EmployeesController {
     @Get()
     getEmployees() {
         // todo: implemt
-        this.emplyoeeService.getAllEmployees();
+        return this.emplyoeeService.getAllEmployees();
     }
 
     @Post()
