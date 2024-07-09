@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { EmployeeSearchDto } from './EmployeeSearch.dto';
+import { EmployeeUpdateDto } from './EmployeeUpdate.dto';
+import { Employee } from './Employee.model';
 
 @Controller('employees')
 export class EmployeesController {
@@ -12,7 +14,7 @@ export class EmployeesController {
         if (Object.keys(param).length) {
             return this.emplyoeeService.searchEmployee(param);
         } else {
-            return this.emplyoeeService.getAllEmployees();
+            return this.emplyoeeService.getAllEmployees()
         }
     }
 
@@ -28,7 +30,15 @@ export class EmployeesController {
 
     @Get('/:id')
     getEmployeeById(@Param('id') id: string) {
-        return this.emplyoeeService.getEmployeeById(id);
+        return this.emplyoeeService.getEmployeeById(id)
     }
+
+
+    @Put('/:id/city')
+    updateEmployee(@Param('id') id: string, @Body() employeeUpdateDto: EmployeeUpdateDto) {
+        employeeUpdateDto.id = id
+        return this.emplyoeeService.updateEmployee(employeeUpdateDto)
+    }
+
 }
 
