@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Employee } from './Employee.model';
+import { Employee, EmployeeStatus } from './Employee.model';
 import { v1 as uuid } from 'uuid'
+import { EmployeeSearchDto } from './EmployeeSearch.dto';
+import { EmployeeUpdateDto } from './EmployeeUpdate.dto';
 
 @Injectable()
 export class EmployeesService {
@@ -21,11 +23,43 @@ export class EmployeesService {
             lastName,
             designation,
             nearestCity,
-            tier
+            tier,
+            status: EmployeeStatus.Active
         }
-
-        this.employees.push(employee);
+        this.employees.push(employee)
         return employee;
+    }
+
+    searchEmployee(employeeSearchDto: EmployeeSearchDto) {
+
+        const { status, name } = employeeSearchDto;
+        let employees = this.getAllEmployees()
+        if (status) {
+            employees = employees.filter(employee => employee.status === status)
+        }
+        if (name) {
+            employees = employees.filter(employee => employee.firstName.includes(name) || employee.lastName.includes(name))
+        }
+        return employees;
+    }
+
+    getEmployeeById(id: string): Employee {
+        const employees = this.getAllEmployees()
+        return employees.find(employee => employee.id === id);
+    }
+
+    updateEmployee(employeeUpdateDto: EmployeeUpdateDto) {
+        const { id, city } = employeeUpdateDto;
+        let employee = this.getEmployeeById(id)
+        employee.nearestCity = city
+        return employee;
+    }
+
+
+    deleteEmployee(id: string): boolean {
+        let employees = this.getAllEmployees()
+        this.employees = employees.filter(employee => employee.id != id)
+        return (employees.length != this.employees.length)
 
 
     }
