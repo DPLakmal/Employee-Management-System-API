@@ -56,7 +56,11 @@ export class EmployeesService {
     }
 
 
-    deleteEmployee(id: string) {
+    deleteEmployee(id: string): boolean {
+        let employees = this.getAllEmployees()
+        this.employees = employees.filter(employee => employee.id != id)
+        return (employees.length != this.employees.length)
+
 
     }
 }

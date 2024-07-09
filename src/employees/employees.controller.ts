@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { EmployeeSearchDto } from './EmployeeSearch.dto';
 import { EmployeeUpdateDto } from './EmployeeUpdate.dto';
@@ -38,6 +38,15 @@ export class EmployeesController {
     updateEmployee(@Param('id') id: string, @Body() employeeUpdateDto: EmployeeUpdateDto) {
         employeeUpdateDto.id = id
         return this.emplyoeeService.updateEmployee(employeeUpdateDto)
+    }
+
+    @Delete('/:id')
+    @HttpCode(204)
+    deleteEmployee(@Param('id') id: string) {
+        if (!this.emplyoeeService.deleteEmployee(id)) {
+            throw new NotFoundException('Employee does not exsist')
+        }
+
     }
 
 }
