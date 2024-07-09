@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
+import { EmployeeSearchDto } from './EmployeeSearch.dto';
 
 @Controller('employees')
 export class EmployeesController {
@@ -7,9 +8,12 @@ export class EmployeesController {
     constructor(private emplyoeeService: EmployeesService) { }
 
     @Get()
-    getEmployees() {
-        // todo: implemt
-        return this.emplyoeeService.getAllEmployees();
+    getAllEmployees(@Query() param: EmployeeSearchDto) {
+        if (Object.keys(param).length) {
+            return this.emplyoeeService.searchEmployee(param);
+        } else {
+            return this.emplyoeeService.getAllEmployees();
+        }
     }
 
     @Post()
@@ -21,4 +25,10 @@ export class EmployeesController {
     ) {
         return this.emplyoeeService.createEmployee(firstName, lastName, designation, nearestCity, tier)
     }
+
+    @Get('/:id')
+    getEmployeeById(@Param('id') id: string) {
+        return this.emplyoeeService.getEmployeeById(id);
+    }
 }
+
